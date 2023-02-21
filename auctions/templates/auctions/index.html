@@ -1,5 +1,10 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-
+<section class="index center">
+    <div class="index inner">
+        {% include './Common/ProductGrid.html' %}
+    </div>
+</section>
+<link rel="stylesheet" href="/static/auctions/index.css">
 {% endblock %}
