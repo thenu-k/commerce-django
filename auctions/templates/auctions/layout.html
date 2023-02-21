@@ -8,7 +8,7 @@
         <link href="{% static 'auctions/styles.css' %}" rel="stylesheet">
     </head>
     <body>
-        <h1>Auctions</h1>
+        <!-- <h1>Auctions</h1>
         <div>
             {% if user.is_authenticated %}
                 Signed in as <strong>{{ user.username }}</strong>.
@@ -35,7 +35,10 @@
                     <a class="nav-link" href="{% url 'register' %}">Register</a>
                 </li>
             {% endif %}
-        </ul>
+        </ul> -->
+        <!-- Header -->
+        {% include './Common/Header.html' %}
+        <!-- /Header -->
         <hr>
         {% block body %}
         <!-- index.html goes here -->
