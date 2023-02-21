@@ -10,7 +10,7 @@ class Listing(models.Model):
     userID = models.IntegerField(blank=False, null=True)
     username = models.CharField(max_length=100, blank=False, null=True)
     category = models.CharField(max_length=30, blank=False, null=True)
-    currentHighestBid = models.IntegerField(blank=False, null=True)
+    currentHighestBid = models.FloatField(blank=False, null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 
 

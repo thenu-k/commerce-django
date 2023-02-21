@@ -1,11 +1,12 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
 <form onsubmit="handleSubmit(event)">
-    <input type="text" placeholder="title">
-    <select name="" id="">
+    <input type="text" placeholder="title" id="titleInput"><br/>
+    <select name="" id="categoryInput">
         <option value="misc" default>Miscellaneous</option>
         <option value="clothing">Clothing</option>
-    </select>
+    </select><br/>
+    <input type="text" placeholder="Base Bid" id="bidInput">
     <button type="submit">Submit</button>
 </form>
 </body>
@@ -14,8 +15,9 @@
         e.preventDefault()
         console.log("Submitting form")
         const payload = {
-            title: e.target.querySelector('input').value,
-            category: e.target.querySelector('select').value
+            title: e.target.querySelector('#titleInput').value,
+            category: e.target.querySelector('#categoryInput').value,
+            baseBid: e.target.querySelector('#bidInput').value
         }
         fetch("/createListing",
         {

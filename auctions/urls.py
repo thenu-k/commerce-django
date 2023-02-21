@@ -1,6 +1,7 @@
 from django.urls import path
-
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -10,4 +11,4 @@ urlpatterns = [
     path('new', views.newListingPage, name='newListing'),
     path('createListing', views.createListing, name='createListing'),
     path('getAllListings', views.getAllListings, name='getAllListings')
-]
+] 

@@ -75,7 +75,7 @@ def newListingPage(request):
 def createListing(request): 
     if request.user.is_authenticated:
         requestData = ast.literal_eval(request.body.decode('utf8'))
-        newListing = Listing(title=requestData["title"], category=requestData['category'], username=request.user.username, userID=request.user.id)
+        newListing = Listing(title=requestData["title"], category=requestData['category'], username=request.user.username, userID=request.user.id, currentHighestBid=requestData['baseBid'])
         newListing.save()
         payload = {
             'status': 'success',
