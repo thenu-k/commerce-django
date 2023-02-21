@@ -6,6 +6,7 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
+    #auto creates id
     title = models.CharField(max_length=100, blank=True, null=True)
     userID = models.IntegerField(blank=True, null=True)
     username = models.CharField(max_length=100, blank=True, null=True)
@@ -13,6 +14,16 @@ class Listing(models.Model):
     currentHighestBid = models.FloatField(blank=True, null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     image = models.ImageField(null=True, blank=True) #uploads_to= (media)
+    userKey = models.ForeignKey(User, on_delete=models.CASCADE)
+
+class Bid(models.Model):
+    dateCreated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    bidValue = models.FloatField(blank=True, null=True)
+    listingID = models.IntegerField(blank=True, null=True)
+    createdByUserID = models.IntegerField(blank=True, null=True)
+    createdByUserKey = models.ForeignKey(User, on_delete=models.CASCADE)
+    listingKey = models.ForeignKey(Listing, on_delete=models.CASCADE)
 
 
 # We need the models to auto cascade when one of them is updated
+# foreign keys will be given as IDs

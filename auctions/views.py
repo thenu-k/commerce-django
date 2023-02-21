@@ -88,6 +88,7 @@ def createListing(request):
     #         'status': 'failure: not logged in',
     #     }
     #     return JsonResponse(payload, status=401)
+    user = User.objects.get(id=request.user.id)
     if (request.method == 'POST'):
         form = NewListingForm().save(commit=False)
         form.username = request.user.username
@@ -96,6 +97,7 @@ def createListing(request):
         form.category = request.POST['category']
         form.title = request.POST['title']
         form.image = request.FILES['image']
+        form.userKey = user
         form.save()
     return HttpResponse('yo')
             
