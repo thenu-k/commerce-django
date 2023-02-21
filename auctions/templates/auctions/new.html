@@ -1,0 +1,29 @@
+{% extends "auctions/layout.html" %}
+{% block body %}
+<form onsubmit="handleSubmit(event)">
+    <input type="text" placeholder="title">
+    <button type="submit">Submit</button>
+</form>
+</body>
+<script defer>
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log("Submitting form")
+        const payload = {
+            title: e.target.querySelector('input').value
+        }
+        fetch("/createListing",
+        {
+            headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: "POST",
+        body: JSON.stringify(payload)
+        })
+        .then((res) => {res.json()})
+        .then((data) => {console.log(data)})
+        .catch((err)=>{console.log(err)})
+    }
+</script>
+{% endblock %}
