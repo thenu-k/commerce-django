@@ -1,4 +1,53 @@
-<div class="productGrid">
-    Product Grid
+{% load static %}
+
+<div class="productGrid outer">
+    <div class="filters">
+        <form action="">
+            <label for="filter">Category: </label>
+            <select name="filter" id="filter" onchange="handleFilter()">
+                <option value="all" default>All</option>
+                <option value="misc">Miscellaneous</option>
+                <option value="clothing">Clothing</option>
+            </select>
+        </form>
+    </div>
+    <div class="productGrid inner">
+    </div>
 </div>
+<script defer>
+    let data = '{{listings}}'
+    data = JSON.parse(data.replace(/&quot;/g,'"'));
+    const handleFilter = () => {
+        const productGrid = document.querySelector('.productGrid.inner')
+        const newFilter = filter.value
+        let html = ''
+        data.forEach(listing => {
+            if(newFilter==='all'){
+                html += `
+                <article class="listing">
+                    <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
+                    </div>
+                    <div class="text">
+                        <h3 class="title">${listing.fields.title}</h3>
+                        <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
+                    </div>
+                </article>
+                `
+            }else if(newFilter!='all' && newFilter===listing.fields.category){
+                html+= `
+                <article class="listing">
+                    <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
+                    </div>
+                    <div class="text">
+                        <h3 class="title">${listing.fields.title}</h3>
+                        <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
+                    </div>
+                </article>
+                `
+            }
+        });
+        productGrid.innerHTML = html
+    }
+    handleFilter()
+</script>
 <link rel="stylesheet" href="/static/auctions/ProductGrid.css">

@@ -20,3 +20,7 @@ html, body, #__next{
 .center{
     display: flex; align-items: center; justify-content: center;
 }
+
+.context{
+    display: none;
+}

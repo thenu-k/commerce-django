@@ -12,7 +12,9 @@ from django.core import serializers
 from .forms import *
 
 def index(request):
-    return render(request, "auctions/index.html")
+    listings = Listing.objects.all()
+    listings = serializers.serialize('json', listings)
+    return render(request, "auctions/index.html", {'listings':listings})
 
 
 def login_view(request):
