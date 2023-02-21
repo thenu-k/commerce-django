@@ -12,6 +12,7 @@ class Listing(models.Model):
     category = models.CharField(max_length=30, blank=False, null=True)
     currentHighestBid = models.FloatField(blank=False, null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    image = models.ImageField(null=True, blank=False) #uploads_to= (media)
 
 
 # We need the models to auto cascade when one of them is updated
