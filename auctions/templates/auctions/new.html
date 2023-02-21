@@ -1,36 +1,21 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
-<form onsubmit="handleSubmit(event)">
-    <input type="text" placeholder="title" id="titleInput"><br/>
-    <select name="" id="categoryInput">
+<!-- <form onsubmit="handleSubmit(event)"> -->
+<form action="/createListing" method="post" enctype="multipart/form-data">
+    <label for="title">Title</label><br/>
+    <input type="text" placeholder="Title" id="titleInput" name="title"><br/>
+    <label for="category">Category</label><br/>
+    <select name="category" id="categoryInput">
         <option value="misc" default>Miscellaneous</option>
         <option value="clothing">Clothing</option>
     </select><br/>
-    <input type="text" placeholder="Base Bid" id="bidInput">
+    <label for="currentHighestBid">Base Bid</label><br/>
+    <input type="text" placeholder="Base Bid" id="bidInput"name='currentHighestBid'><br/>
+    <label for="image">Image Upload: </label>
+    <input type="file" name="image" id=""><br/>
     <button type="submit">Submit</button>
 </form>
 </body>
 <script defer>
-    const handleSubmit = (e) => {
-        e.preventDefault()
-        console.log("Submitting form")
-        const payload = {
-            title: e.target.querySelector('#titleInput').value,
-            category: e.target.querySelector('#categoryInput').value,
-            baseBid: e.target.querySelector('#bidInput').value
-        }
-        fetch("/createListing",
-        {
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: "POST",
-        body: JSON.stringify(payload)
-        })
-        .then((res) => {res.json()})
-        .then((data) => {console.log(data)})
-        .catch((err)=>{console.log(err)})
-    }
 </script>
 {% endblock %}

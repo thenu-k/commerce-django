@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
 import ast
 from django.core import serializers
+from .forms import *
 
 def index(request):
     return render(request, "auctions/index.html")
@@ -73,20 +74,31 @@ def newListingPage(request):
 
 @csrf_exempt
 def createListing(request): 
-    if request.user.is_authenticated:
-        requestData = ast.literal_eval(request.body.decode('utf8'))
-        newListing = Listing(title=requestData["title"], category=requestData['category'], username=request.user.username, userID=request.user.id, currentHighestBid=requestData['baseBid'])
-        newListing.save()
-        payload = {
-            'status': 'success',
-            'requestBody' : requestData
-        }
-        return JsonResponse(payload)
-    else:
-        payload = {
-            'status': 'failure: not logged in',
-        }
-        return JsonResponse(payload, status=401)
+    # if request.user.is_authenticated:
+    #     requestData = ast.literal_eval(request.body.decode('utf8'))
+    #     newListing = Listing(title=requestData["title"], category=requestData['category'], username=request.user.username, userID=request.user.id, currentHighestBid=requestData['baseBid'])
+    #     newListing.save()
+    #     payload = {
+    #         'status': 'success',
+    #         'requestBody' : requestData
+    #     }
+    #     return JsonResponse(payload)
+    # else:
+    #     payload = {
+    #         'status': 'failure: not logged in',
+    #     }
+    #     return JsonResponse(payload, status=401)
+    if (request.method == 'POST'):
+        form = NewListingForm().save(commit=False)
+        form.username = request.user.username
+        form.userID = request.user.id
+        form.currentHighestBid = request.POST['currentHighestBid']
+        form.category = request.POST['category']
+        form.title = request.POST['title']
+        form.image = request.FILES['image']
+        form.save()
+    return HttpResponse('yo')
+            
         
 def getAllListings(request):
     if request.method=='GET':
