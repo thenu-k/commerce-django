@@ -8,6 +8,7 @@ from .models import User, Listing
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from django.http import JsonResponse
 import ast
+from django.core import serializers
 
 def index(request):
     return render(request, "auctions/index.html")
@@ -74,7 +75,7 @@ def newListingPage(request):
 def createListing(request): 
     if request.user.is_authenticated:
         requestData = ast.literal_eval(request.body.decode('utf8'))
-        newListing = Listing(title=requestData["title"])
+        newListing = Listing(title=requestData["title"], category=requestData['category'], username=request.user.username, userID=request.user.id)
         newListing.save()
         payload = {
             'status': 'success',
@@ -87,3 +88,10 @@ def createListing(request):
         }
         return JsonResponse(payload, status=401)
         
+def getAllListings(request):
+    if request.method=='GET':
+        data = Listing.objects.all().values()
+        payload = {
+            'data': list(data)
+        }
+        return JsonResponse(payload)

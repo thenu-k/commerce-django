@@ -2,6 +2,10 @@
 {% block body %}
 <form onsubmit="handleSubmit(event)">
     <input type="text" placeholder="title">
+    <select name="" id="">
+        <option value="misc" default>Miscellaneous</option>
+        <option value="clothing">Clothing</option>
+    </select>
     <button type="submit">Submit</button>
 </form>
 </body>
@@ -10,7 +14,8 @@
         e.preventDefault()
         console.log("Submitting form")
         const payload = {
-            title: e.target.querySelector('input').value
+            title: e.target.querySelector('input').value,
+            category: e.target.querySelector('select').value
         }
         fetch("/createListing",
         {
