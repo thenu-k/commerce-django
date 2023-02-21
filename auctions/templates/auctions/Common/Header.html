@@ -1,3 +1,19 @@
-<header>
-    Header
+{% load static %}
+
+<header class="center">
+    <div class="header inner">
+        <h2 class="center"><a href="/">COMMERCE</a></h2>
+        <ul>
+            {% if user.is_authenticated %}
+                <li><a href="/watchlist">Watch List</a></li>
+                <li><a href="/account">My Listings</a></li>
+                <li><a href="/logout">Logout</a></li>
+            {% else %}
+                <li><a href="/new">Create Listing</a></li>
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+            {% endif %}
+        </ul>
+    </div>
 </header>
+<link rel="stylesheet" href="/static/auctions/Header.css">
