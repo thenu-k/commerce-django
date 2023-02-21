@@ -11,4 +11,4 @@ urlpatterns = [
     path('new', views.newListingPage, name='newListing'),
     path('createListing', views.createListing, name='createListing'),
     path('getAllListings', views.getAllListings, name='getAllListings')
-] 
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

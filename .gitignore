@@ -1,2 +1,2 @@
 db.sqlite3
-/auctions/__pychache__
+*__pycache__*
