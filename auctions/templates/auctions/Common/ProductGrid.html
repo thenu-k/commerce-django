@@ -21,26 +21,27 @@
         const productGrid = document.querySelector('.productGrid.inner')
         const newFilter = filter.value
         let html = ''
-        console.log(data)
         data.forEach(listing => {
-            if(newFilter==='all'){
+            if(newFilter==='all' && listing.fields.isClosed===false){
                 html += `
                 <article class="listing">
                     <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
                     </div>
                     <div class="text">
                         <h3 class="title">${listing.fields.title}</h3>
+                        <p class="">by ${listing.fields.username}</p>
                         <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
                     </div>
                 </article>
                 `
-            }else if(newFilter!='all' && newFilter===listing.fields.category){
+            }else if(newFilter!='all' && newFilter===listing.fields.category  && listing.fields.isClosed===false){
                 html+= `
                 <article class="listing">
                     <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
                     </div>
                     <div class="text">
                         <h3 class="title">${listing.fields.title}</h3>
+                        <p class="">$by ${listing.fields.username}</p>
                         <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
                     </div>
                 </article>

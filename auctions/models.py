@@ -15,6 +15,7 @@ class Listing(models.Model):
     dateCreated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     image = models.ImageField(null=True, blank=True) #uploads_to= (media)
     userKey = models.ForeignKey(User, on_delete=models.CASCADE)
+    isClosed = models.BooleanField(auto_created=False,  blank=True, null=False)
 
 class Bid(models.Model):
     id = models.AutoField(primary_key=True)
