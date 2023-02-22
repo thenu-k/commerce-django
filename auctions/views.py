@@ -121,3 +121,9 @@ def getUserListings(request):
                 'status': 'failure'
             }
             return JsonResponse(payload, status=500)
+
+def renderAccountPage(request, userID):
+    if  User.objects.filter(id=userID).exists():
+        return JsonResponse({'found': 'found'})
+    else: 
+        return redirect('/404')
