@@ -1,5 +1,27 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
 {% block body %}
-    {% include '../Common/ProductGrid.html' %}
+    <section class="account center">
+        <div class="account inner">
+            <h2>My Account</h2>
+            <div class="accountDetails">
+                <p>Signed in as <span>{{user.username}}</span>.</p>
+                <div class="buttons">
+                    <button id="Logout" onclick="handleLogout()">Logout</button>
+                    <button id="DeleteAccount" onclick="handleDelete()">Delete Account</button>
+                </div>
+            </div>
+            <h2>My Listings</h2>
+            {% include '../Common/ProductGrid.html' %}
+        </div>
+    </section>
+    <link rel="stylesheet" href="/static/auctions/account.css">
+    <script defer>
+        const handleLogout =() =>  {
+            window.location.href= '/logout'
+        }
+        const handleDelete = () => {
+            window.location.href= '/deleteAccount'
+        }
+    </script>
 {% endblock %}

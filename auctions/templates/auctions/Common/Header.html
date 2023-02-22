@@ -4,11 +4,11 @@
     <div class="header inner">
         <h2 class="center"><a href="/" class="center">COMMERCE</a></h2>
         <ul>
+            <li><a href="/">All Listings</a></li>
             <li><a href="/new">Create Listing</a></li>
             {% if user.is_authenticated %}
                 <li><a href="/watchlist">Watch List</a></li>
-                <li><a href="/account/{{user.id}}">My Listings</a></li>
-                <li><a href="/logout">Logout</a></li>
+                <li><a href="/account/{{user.id}}">My Account</a></li>
             {% else %}
                 <li><a href="/login">Login</a></li>
                 <li><a href="/register">Register</a></li>

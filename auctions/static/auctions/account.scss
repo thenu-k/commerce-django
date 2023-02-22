@@ -1,0 +1,50 @@
+section.account{
+    width: 100%;
+    & .account.inner{
+        width: 95%;
+        & h2{
+            font-size: 1.3em;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        & .accountDetails{
+            display: flex;
+            flex-direction: column; 
+            & p{
+                & span{
+                    all: inherit;
+                    display: inline;
+                    font-weight: 500;
+                }
+                margin-bottom: 10px;
+            }
+            & .buttons{
+                display: flex;
+                align-items: center;
+                & button{
+                    padding: 10px 15px;
+                    border-radius: 5px;
+                    background-color: #DDDDDD;
+                    cursor: pointer;
+                    &:first-of-type{
+                        margin-right: 10px;
+                    }
+                    &#Logout{
+                        &:hover{
+                            background-color: #BBBBBB;
+                        }
+                    }
+                    &#DeleteAccount{
+                        background-color: red;
+                        color: white;
+                        font-weight: 600;
+                        &:hover{
+                            background-color: rgb(207, 0, 0);
+                        }
+                    }
+                }
+            }
+            margin-bottom: 20px;
+        }
+    }
+}
