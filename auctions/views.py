@@ -147,7 +147,7 @@ def deleteAccount(request):
             userObject = User.objects.filter(id=userID)
             if  userObject.exists() and request.user.id==int(userID):
                 userObject.delete()
-                return redirect('/')
+                return JsonResponse({'status': 'success'})
             else:
                 return JsonResponse({'status': 'user not found'}, status=404)
         else:
