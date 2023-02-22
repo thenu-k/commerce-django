@@ -10,5 +10,6 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path('new', views.newListingPage, name='newListing'),
     path('createListing', views.createListing, name='createListing'),
-    path('getAllListings', views.getAllListings, name='getAllListings')
+    path('getAllListings', views.getAllListings, name='getAllListings'),
+    path('getUserListings', views.getUserListings, name='getUserListings')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

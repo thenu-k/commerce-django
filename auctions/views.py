@@ -10,6 +10,7 @@ from django.http import JsonResponse
 import ast
 from django.core import serializers
 from .forms import *
+import json
 
 def index(request):
     listings = Listing.objects.all()
@@ -76,33 +77,21 @@ def newListingPage(request):
 
 @csrf_exempt
 def createListing(request): 
-    # if request.user.is_authenticated:
-    #     requestData = ast.literal_eval(request.body.decode('utf8'))
-    #     newListing = Listing(title=requestData["title"], category=requestData['category'], username=request.user.username, userID=request.user.id, currentHighestBid=requestData['baseBid'])
-    #     newListing.save()
-    #     payload = {
-    #         'status': 'success',
-    #         'requestBody' : requestData
-    #     }
-    #     return JsonResponse(payload)
-    # else:
-    #     payload = {
-    #         'status': 'failure: not logged in',
-    #     }
-    #     return JsonResponse(payload, status=401)
-    user = User.objects.get(id=request.user.id)
-    if (request.method == 'POST'):
-        form = NewListingForm().save(commit=False)
-        form.username = request.user.username
-        form.userID = request.user.id
-        form.currentHighestBid = request.POST['currentHighestBid']
-        form.category = request.POST['category']
-        form.title = request.POST['title']
-        form.image = request.FILES['image']
-        form.userKey = user
-        form.save()
-    return HttpResponse('yo')
-            
+    if request.user.is_authenticated:
+        user = User.objects.get(id=request.user.id)
+        if (request.method == 'POST'):
+            form = NewListingForm().save(commit=False)
+            form.username = request.user.username
+            form.userID = request.user.id
+            form.currentHighestBid = request.POST['currentHighestBid']
+            form.category = request.POST['category']
+            form.title = request.POST['title']
+            form.image = request.FILES['image']
+            form.userKey = user
+            form.save()
+        return redirect('/')
+    else: 
+        return redirect('/login')  
         
 def getAllListings(request):
     if request.method=='GET':
@@ -111,3 +100,24 @@ def getAllListings(request):
             'data': list(data)
         }
         return JsonResponse(payload)
+
+def getUserListings(request):
+    if request.method=='GET':
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        userID = body['userID']
+        try:
+            userObject = User.objects.get(id=userID)   #filter returns multiple values, so get must be used if this will be used as a key
+            listings = Listing.objects.filter(userKey=userObject)
+            listings_json = json.loads(serializers.serialize('json', listings))
+            payload = {
+                'userID': userID,
+                'listings': listings_json
+            }
+            return JsonResponse(payload)
+        except: 
+            payload = {
+                'userID': userID,
+                'status': 'failure'
+            }
+            return JsonResponse(payload, status=500)

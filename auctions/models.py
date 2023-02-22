@@ -6,7 +6,7 @@ class User(AbstractUser):
     pass
 
 class Listing(models.Model):
-    #auto creates id
+    id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=100, blank=True, null=True)
     userID = models.IntegerField(blank=True, null=True)
     username = models.CharField(max_length=100, blank=True, null=True)
@@ -17,6 +17,7 @@ class Listing(models.Model):
     userKey = models.ForeignKey(User, on_delete=models.CASCADE)
 
 class Bid(models.Model):
+    id = models.AutoField(primary_key=True)
     dateCreated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     bidValue = models.FloatField(blank=True, null=True)
     listingID = models.IntegerField(blank=True, null=True)

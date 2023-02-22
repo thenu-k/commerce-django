@@ -25,9 +25,10 @@ div.productGrid.outer{
             display: flex; flex-direction: column; align-items: center;
             cursor: pointer;
             box-sizing: border-box;
-            padding: 5px;
+            padding: 10px;
             &:hover{
-                background-color: #DDDDDD;
+                background-color: #EEEEEE;
+                box-shadow: 0 0 5px #BBBBBB;
                 border-radius: 10px;
             }
             & .image.outer{
