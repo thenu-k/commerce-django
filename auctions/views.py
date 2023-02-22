@@ -137,3 +137,20 @@ def renderAccountPage(request, userID):
         return render(request, 'auctions/Account/account.html', payload)
     else: 
         return redirect('/404')
+
+@csrf_exempt
+def deleteAccount(request):
+    try:
+        if request.user.is_authenticated:
+            body = json.loads(request.body)
+            userID = body['userID']
+            userObject = User.objects.filter(id=userID)
+            if  userObject.exists() and request.user.id==int(userID):
+                userObject.delete()
+                return redirect('/')
+            else:
+                return JsonResponse({'status': 'user not found'}, status=404)
+        else:
+            return redirect('/404')
+    except:
+        return JsonResponse({'status': 'server error'}, status=500)

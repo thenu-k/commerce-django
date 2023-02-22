@@ -21,7 +21,16 @@
             window.location.href= '/logout'
         }
         const handleDelete = () => {
-            window.location.href= '/deleteAccount'
+            fetch('/deleteAccount', {
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body:JSON.stringify({
+                    userID: '{{user.id}}'
+                })
+            });
         }
     </script>
 {% endblock %}

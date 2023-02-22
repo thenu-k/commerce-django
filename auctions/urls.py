@@ -12,5 +12,6 @@ urlpatterns = [
     path('createListing', views.createListing, name='createListing'),
     path('getAllListings', views.getAllListings, name='getAllListings'),
     path('getUserListings', views.getUserListings, name='getUserListings'),
-    path('account/<userID>', views.renderAccountPage, name='renderAccountPage')
+    path('account/<userID>', views.renderAccountPage, name='renderAccountPage'),
+    path('deleteAccount', views.deleteAccount, name='deleteAccount')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
