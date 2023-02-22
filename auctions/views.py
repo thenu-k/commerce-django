@@ -107,14 +107,20 @@ def getUserListings(request):
         body = json.loads(body_unicode)
         userID = body['userID']
         try:
-            userObject = User.objects.get(id=userID)   #filter returns multiple values, so get must be used if this will be used as a key
-            listings = Listing.objects.filter(userKey=userObject)
-            listings_json = json.loads(serializers.serialize('json', listings))
-            payload = {
-                'userID': userID,
-                'listings': listings_json
-            }
-            return JsonResponse(payload)
+            if  User.objects.filter(id=userID).exists():
+                userObject = User.objects.get(id=userID)   #filter returns multiple values, so get must be used if this will be used as a key
+                listings = Listing.objects.filter(userKey=userObject)
+                listings_json = json.loads(serializers.serialize('json', listings))
+                payload = {
+                    'userID': userID,
+                    'listings': listings_json
+                }
+                return JsonResponse(payload)
+            else: 
+                payload = {
+                    'status': 'user not found'
+                }
+                return JsonResponse(payload, status=404)
         except: 
             payload = {
                 'userID': userID,
@@ -124,6 +130,10 @@ def getUserListings(request):
 
 def renderAccountPage(request, userID):
     if  User.objects.filter(id=userID).exists():
-        return JsonResponse({'found': 'found'})
+        userObject = User.objects.get(id=userID)   #filter returns multiple values, so get must be used if this will be used as a key
+        listings = Listing.objects.filter(userKey=userObject)
+        listings_json = serializers.serialize('json', listings)   #cannot use json_loads on this cause it will mess up the javscript logic
+        payload = {'listings': listings_json}
+        return render(request, 'auctions/Account/account.html', payload)
     else: 
         return redirect('/404')
