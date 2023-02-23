@@ -24,7 +24,11 @@ def index(request):
     payload = []
     for count in range(listings.count()):
         currentListingObject = listings[count]
-        currentHighestBid = Bid.objects.filter(listingID=currentListingObject.id).aggregate(Max('bidValue')).get('bidValue__max')
+        #Checking whether a bid exists. If not, the base bid will be the current highest bid
+        if Bid.objects.filter(listingID=currentListingObject.id ).exists():
+            currentHighestBid = Bid.objects.filter(listingID=currentListingObject.id).aggregate(Max('bidValue')).get('bidValue__max')
+        else:
+            currentHighestBid = Listing.objects.get(id=currentListingObject.id).baseBid
         tempValue = {
             'currentHighestBid': currentHighestBid,
             #this function convert a SINGLE object to a dictionary. the default is there to conver the imagefield to string
@@ -153,13 +157,34 @@ def getUserListings(request):
 
 def renderAccountPage(request, userID):
     if  User.objects.filter(id=userID).exists():
-        userObject = User.objects.get(id=userID)   #filter returns multiple values, so get must be used if this will be used as a key
-        listings = Listing.objects.filter(userKey=userObject)
-        listings_json = serializers.serialize('json', listings)   #cannot use json_loads on this cause it will mess up the javscript logic
-        payload = {'listings': listings_json}
-        return render(request, 'auctions/Account/account.html', payload)
+        # Getting the filter params if it exists
+        filter = request.GET.get('filter','null')
+        if(filter=='null' or filter=='all'):
+            listings = Listing.objects.filter(userID=userID)
+        else:
+            listings = Listing.objects.filter(category=filter, userID=userID)
+        payload = []
+        for count in range(listings.count()):
+            currentListingObject = listings[count]
+            #Checking whether a bid exists. If not, the base bid will be the current highest bid
+            if Bid.objects.filter(listingID=currentListingObject.id ).exists():
+                currentHighestBid = Bid.objects.filter(listingID=currentListingObject.id).aggregate(Max('bidValue')).get('bidValue__max')
+            else:
+                currentHighestBid = Listing.objects.get(id=currentListingObject.id).baseBid
+            tempValue = {
+                'currentHighestBid': currentHighestBid,
+                #this function convert a SINGLE object to a dictionary. the default is there to conver the imagefield to string
+                # 'id' : json.dumps(model_to_dict(currentListingObject), default=str)
+                'id': currentListingObject.id,
+                'username': currentListingObject.username,
+                'imageURL': str(currentListingObject.image),
+                'isClosed': currentListingObject.isClosed,
+                'title': currentListingObject.title
+            }
+            payload.append(tempValue)
+        return render(request, 'auctions/Account/account.html', {'payload': payload, 'displayClosed' : True})
     else: 
-        return redirect('/404')
+        return redirect('/404') 
 
 @csrf_exempt
 def deleteAccount(request):
