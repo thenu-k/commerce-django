@@ -176,6 +176,8 @@ def renderListingPage(request, listingID):
         currentHighestBid = Listing.objects.filter(id=listingID).values('baseBid')[0]['baseBid']
     #Checking whether the user has watched this item
     userHasWatched = False
+    if Watch.objects.filter(listingID=listingID, createdByUserID=request.user.id ).exists():
+        userHasWatched = True
     context = {
         'listing': listingObject,
         'currentHighestBid': currentHighestBid,
@@ -208,3 +210,25 @@ def newBid(request):
         return  JsonResponse(payload)
     payload = {'status': 'failure'}
     return JsonResponse(payload, status=401)
+
+@csrf_exempt
+def setWatch(request, stateRequired, listingID):
+    if request.user.is_authenticated:
+        if(stateRequired=='watch'):
+            #Getting the objects for the key
+            userObject = User.objects.get(id=request.user.id)
+            listingObject = Listing.objects.get(id=listingID)
+            #Creating the new object
+            newWatchObject = Watch(
+                listingID = listingID,
+                createdByUserID = request.user.id,
+                createdByUserKey = userObject,
+                listingKey = listingObject,
+            )
+            newWatchObject.save()
+            return JsonResponse({'success': 'true'})
+        elif(stateRequired=='unwatch'):
+            #Deleting the existing object
+            watchObject = Watch.objects.get(listingID=listingID, createdByUserID=request.user.id)
+            watchObject.delete()
+            return JsonResponse({'success': 'true'})

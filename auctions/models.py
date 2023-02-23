@@ -28,6 +28,13 @@ class Bid(models.Model):
     listingKey = models.ForeignKey(Listing, on_delete=models.CASCADE)
     isHighest = models.BooleanField(null=True, blank=True)
 
+class Watch(models.Model):
+    id = models.AutoField(primary_key=True)
+    dateCreated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
+    listingID = models.IntegerField(blank=True, null=True)
+    createdByUserID = models.IntegerField(blank=True, null=True)
+    createdByUserKey = models.ForeignKey(User, on_delete=models.CASCADE)
+    listingKey = models.ForeignKey(Listing, on_delete=models.CASCADE)
 
 # We need the models to auto cascade when one of them is updated
 # foreign keys will be given as IDs

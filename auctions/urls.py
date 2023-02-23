@@ -15,5 +15,6 @@ urlpatterns = [
     path('account/<userID>', views.renderAccountPage, name='renderAccountPage'),
     path('deleteAccount', views.deleteAccount, name='deleteAccount'),
     path('listing/<listingID>', views.renderListingPage, name='renderListingPage'),
-    path('newBid', views.newBid, name='newBid')
+    path('newBid', views.newBid, name='newBid'),
+    path('setwatch/<stateRequired>/<listingID>', views.setWatch, name='setWatch')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

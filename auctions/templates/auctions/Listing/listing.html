@@ -34,9 +34,9 @@
                 {% if user.is_authenticated%}
                     <div class="subsection watch">
                         {% if not userHasWatched%}
-                        <button onclick="toggleWatch('on')" class="notWatched">Watch</button>
+                        <button onclick="toggleWatch('watch')" class="notWatched">Watch</button>
                         {% else%}
-                        <button onclick="toggleWatch('off')" class="watched">Unwatch</button>
+                        <button onclick="toggleWatch('unwatch')" class="watched">Unwatch</button>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -81,7 +81,18 @@
         })
     }
     const toggleWatch = (state) => {
-        null
+        fetch(`/setwatch/${state}/${listingID}`,{
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            window.location.reload()
+        })
     }
 </script>
 {% endblock %}
