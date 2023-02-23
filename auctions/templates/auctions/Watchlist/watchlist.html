@@ -1,0 +1,11 @@
+{% extends "auctions/layout.html" %}
+{% load static %}
+{% block body %}
+<section class="watchlist center">
+    <div class="watchlist inner">
+        <h2>Watchlist</h2>
+        {% include '../Common/productGrid.html'%}
+    </div>
+</section>
+<link rel="stylesheet" href="/static/auctions/watchlist.css">
+{% endblock %}
