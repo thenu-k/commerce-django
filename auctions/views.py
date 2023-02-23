@@ -231,7 +231,6 @@ def renderListingPage(request, listingID):
         'currentUserIsHighest': currentUserIsHighest,
         'userHasWatched': userHasWatched
     }
-    print(context)
     return render(request, 'auctions/Listing/listing.html', context)
 
 @csrf_exempt
@@ -304,3 +303,12 @@ def renderWatchListPage(request):
         return render(request, 'auctions/Watchlist/watchlist.html',{'payload': payload, 'displayClosed': True})
     else:
         return redirect('/404')
+
+@csrf_exempt
+def closeListing(request):
+        listingID = request.GET.get('listingid','null')
+        if Listing.objects.filter(id=listingID, userID=request.user.id).exists():
+            listingObject = Listing.objects.get(id=listingID, userID=request.user.id)
+            listingObject.isClosed = True
+            listingObject.save()
+            return JsonResponse({'success': True})

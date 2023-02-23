@@ -17,5 +17,6 @@ urlpatterns = [
     path('listing/<listingID>', views.renderListingPage, name='renderListingPage'),
     path('newBid', views.newBid, name='newBid'),
     path('setwatch/<stateRequired>/<listingID>', views.setWatch, name='setWatch'),
-    path('watchlist', views.renderWatchListPage, name='renderWatchListPage')
+    path('watchlist', views.renderWatchListPage, name='renderWatchListPage'),
+    path('closelisting', views.closeListing, name='closeListing')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

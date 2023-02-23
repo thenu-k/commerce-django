@@ -43,6 +43,11 @@
                         {% endif %}
                     </div>
                 {% endif %}
+                {% if user.is_authenticated and userEqual and not listing.0.isClosed%}
+                    <div class="subsection close">
+                        <button onclick="closeListing()">Close Listing</button>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -51,6 +56,20 @@
 <script defer>
     const currentHighestBid = parseFloat('{{currentHighestBid|safe}}')
     const listingID = parseInt('{{listing.0.id}}')
+    const closeListing = () => {
+        fetch(`/closelisting?listingid=${listingID}`,{
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+            window.location.reload()
+        })
+    }
     const placeBid = (e) => {
         e.preventDefault()
         bidMessage.classList.add('off')
@@ -93,7 +112,7 @@
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data)
+            if (data.success===true)
             window.location.reload()
         })
     }
