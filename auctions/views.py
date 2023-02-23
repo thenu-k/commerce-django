@@ -159,13 +159,25 @@ def deleteAccount(request):
 
 def renderListingPage(request, listingID):
     listingObject = Listing.objects.filter(id=int(listingID)).values()
+    # Checking whether this user is the user who created the listing
+    if(request.user.id==listingObject[0]['userID']):
+        userEqual =True
+    else: 
+        userEqual = False
+    currentUserIsHighest = False
+    #Checking whether a bid exists. If not, the base bid will be the current highest bid
     if Bid.objects.filter(listingID=listingID ).exists():
         currentHighestBid = Bid.objects.filter(listingID=listingID).aggregate(Max('bidValue')).get('bidValue__max')
+        #Checking if the current user is the highest bidder
+        if(request.user.id==Bid.objects.filter(listingID=listingID).values().latest('id')['createdByUserID']):
+                currentUserIsHighest = True
     else:
         currentHighestBid = Listing.objects.filter(id=listingID).values('baseBid')[0]['baseBid']
     context = {
         'listing': listingObject,
-        'currentHighestBid': currentHighestBid
+        'currentHighestBid': currentHighestBid,
+        'userEqual' : userEqual,
+        'currentUserIsHighest': currentUserIsHighest
     }
     return render(request, 'auctions/Listing/listing.html', context)
 
