@@ -21,10 +21,11 @@
         const productGrid = document.querySelector('.productGrid.inner')
         const newFilter = filter.value
         let html = ''
+        console.log(data)
         data.forEach(listing => {
             if(newFilter==='all' && listing.fields.isClosed===false){
                 html += `
-                <article class="listing">
+                <article class="listing" onclick="handleListingClick(${listing.pk})">
                     <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
                     </div>
                     <div class="text">
@@ -36,7 +37,7 @@
                 `
             }else if(newFilter!='all' && newFilter===listing.fields.category  && listing.fields.isClosed===false){
                 html+= `
-                <article class="listing">
+                <article class="listing" onclick="handleListingClick(${listing.pk})">
                     <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
                     </div>
                     <div class="text">
@@ -51,5 +52,8 @@
         productGrid.innerHTML = html
     }
     handleFilter()
+    const handleListingClick = (listingID) => {
+        window.location.href = `/listing/${listingID}`
+    }
 </script>
 <link rel="stylesheet" href="/static/auctions/ProductGrid.css">
