@@ -40,46 +40,8 @@
     </div>
 </div>
 <script defer>
-    let data = '{{payload}}'
-    data = data.replace(/&#x27;/g,'"')
-    data = data.replace(/&quot;/g,'"')
-    // data = JSON.parse(data)
-    // const handleFilter = () => {
-    //     const productGrid = document.querySelector('.productGrid.inner')
-    //     const newFilter = filter.value
-    //     let html = ''
-    //     console.log(data)
-    //     data.forEach(listing => {
-    //         if(newFilter==='all' && listing.fields.isClosed===false){
-    //             html += `
-    //             <article class="listing" onclick="handleListingClick(${listing.pk})">
-    //                 <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
-    //                 </div>
-    //                 <div class="text">
-    //                     <h3 class="title">${listing.fields.title}</h3>
-    //                     <p class="">by ${listing.fields.username}</p>
-    //                     <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
-    //                 </div>
-    //             </article>
-    //             `
-    //         }else if(newFilter!='all' && newFilter===listing.fields.category  && listing.fields.isClosed===false){
-    //             html+= `
-    //             <article class="listing" onclick="handleListingClick(${listing.pk})">
-    //                 <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
-    //                 </div>
-    //                 <div class="text">
-    //                     <h3 class="title">${listing.fields.title}</h3>
-    //                     <p class="">$by ${listing.fields.username}</p>
-    //                     <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
-    //                 </div>
-    //             </article>
-    //             `
-    //         }
-    //     });
-    //     productGrid.innerHTML = html
-    // }
     const handleFilter = () => {
-        window.location.href = `/?filter=${filter.value}`
+        window.location.href = window.location.href.split(/[?#]/)[0] + `?filter=${filter.value}`
     }
     // Inserting the filter options
     const currentFilter = new URLSearchParams(window.location.search).get('filter')
