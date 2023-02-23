@@ -154,3 +154,11 @@ def deleteAccount(request):
             return redirect('/404')
     except:
         return JsonResponse({'status': 'server error'}, status=500)
+
+def renderListingPage(request, listingID):
+    listingObject = Listing.objects.filter(id=int(listingID))
+    listing_json = serializers.serialize('json', listingObject)
+    context = {
+        'listing': listing_json
+    }
+    return render(request, 'auctions/Listing/listing.html', context)
