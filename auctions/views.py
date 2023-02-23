@@ -84,11 +84,12 @@ def createListing(request):
             form = NewListingForm().save(commit=False)
             form.username = request.user.username
             form.userID = request.user.id
-            form.currentHighestBid = request.POST['currentHighestBid']
+            form.baseBid = request.POST['currentHighestBid']
             form.category = request.POST['category']
             form.title = request.POST['title']
             form.image = request.FILES['image']
             form.userKey = user
+            form.isClosed = False
             form.save()
         return redirect('/')
     else: 
@@ -158,7 +159,10 @@ def deleteAccount(request):
 
 def renderListingPage(request, listingID):
     listingObject = Listing.objects.filter(id=int(listingID)).values()
-    currentHighestBid = Bid.objects.filter(listingID=listingID).aggregate(Max('bidValue')).get('bidValue__max')
+    if Bid.objects.filter(listingID=listingID ).exists():
+        currentHighestBid = Bid.objects.filter(listingID=listingID).aggregate(Max('bidValue')).get('bidValue__max')
+    else:
+        currentHighestBid = Listing.objects.filter(id=listingID).values('baseBid')[0]['baseBid']
     context = {
         'listing': listingObject,
         'currentHighestBid': currentHighestBid
@@ -174,12 +178,15 @@ def newBid(request):
     listingObject = Listing.objects.get(id=listingID)
     userObjet = User.objects.get(id=request.user.id)
     allBidObjectsForListing = Bid.objects.filter(listingID=listingID)
-    if(newBidValue>listingObject.currentHighestBid):
-        listingObject.currentHighestBid= newBidValue
+    if Bid.objects.filter(listingID=listingID).exists():
+        currentHighestBid = Bid.objects.filter(listingID=listingID).aggregate(Max('bidValue')).get('bidValue__max')
+    else:
+        currentHighestBid = Listing.objects.filter(id=listingID).values('baseBid')[0]['baseBid']
+    if(newBidValue>currentHighestBid):
+        #listingObject.currentHighestBid= newBidValue
         listingObject.save()
         newBidObject = Bid(bidValue = newBidValue, listingID=listingObject.id, createdByUserID=request.user.id, createdByUserKey=userObjet, listingKey=listingObject)
         newBidObject.save()
-        allBidObjectsForListing.update(isHighest=False)
         payload = {'status': 'success'}
         return  JsonResponse(payload)
     payload = {'status': 'failure'}

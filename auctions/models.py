@@ -11,7 +11,7 @@ class Listing(models.Model):
     userID = models.IntegerField(blank=True, null=True)
     username = models.CharField(max_length=100, blank=True, null=True)
     category = models.CharField(max_length=30, blank=True, null=True)
-    currentHighestBid = models.FloatField(blank=True, null=True)
+    baseBid = models.FloatField(blank=True, null=True)
     dateCreated = models.DateTimeField(auto_now_add=True, blank=True, null=True)
     image = models.ImageField(null=True, blank=True) #uploads_to= (media)
     userKey = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -26,7 +26,7 @@ class Bid(models.Model):
     createdByUserID = models.IntegerField(blank=True, null=True)
     createdByUserKey = models.ForeignKey(User, on_delete=models.CASCADE)
     listingKey = models.ForeignKey(Listing, on_delete=models.CASCADE)
-    isHighest = models.BooleanField(auto_created=True, null=True, blank=True)
+    isHighest = models.BooleanField(null=True, blank=True)
 
 
 # We need the models to auto cascade when one of them is updated

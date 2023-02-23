@@ -56,6 +56,7 @@
         .then(res => res.json())
         .then(data => {
             if(data.status==='success'){
+                bidInput.value = ''
                 window.location.reload()
             }
         })
