@@ -1,5 +1,14 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
 {% block body %}
-{{listing}}
+<section class="listing">
+    <div class="listing inner">
+        <h2></h2>
+        {{ listing.0.title }}
+    </div>
+</section>
+<link rel="stylesheet" href="/static/auctions/listing.css">
+<script>
+    const listingData = JSON.parse('{{listing|safe}}')
+</script>
 {% endblock %}
