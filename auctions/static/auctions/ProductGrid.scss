@@ -53,6 +53,20 @@ div.productGrid.outer{
                 & p.bidValue{
                     font-size: normal;
                 }
+                & p.closedStatus{
+                    width: fit-content;
+                    border-radius: 10px;
+                    color: white;
+                    font-weight: 600;
+                    padding: 3px 10px;
+                    margin-top: 10px;
+                    &.closed{
+                        background-color: red;
+                    }
+                    &.open{
+                        background-color: green;
+                    }
+                }
             }
         }
     }

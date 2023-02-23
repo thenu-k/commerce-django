@@ -2,56 +2,96 @@
 
 <div class="productGrid outer">
     <div class="filters">
-        <form action="">
+        <form id="filterForm">
             <label for="filter">Category: </label>
             <select name="filter" id="filter" onchange="handleFilter()">
-                <option value="all" default>All</option>
-                <option value="misc">Miscellaneous</option>
-                <option value="clothing">Clothing</option>
             </select>
         </form>
     </div>
     <div class="productGrid inner">
+        {% for listing in payload%}
+            {% if displayClosed%}
+            <article class="listing" onclick="handleListingClick({{listing.id}})">
+                <div class="image outer" style="background-image: url('/media/{{listing.imageURL}}')">
+                </div>
+                <div class="text">
+                    <h3 class="title">{{listing.title}}</h3>
+                    <p class="">by {{listing.username}}</p>
+                    <p class="bidValue">$ {{listing.currentHighestBid}}</p>
+                    {% if not listing.isClosed %}
+                    <p class="closedStatus open">Open</p>
+                    {% elif listing.isClosed %}
+                    <p class="closedStatus closed">Closed</p>
+                    {%endif%}
+                </div>
+            </article>
+            {% elif not displayClosed and not listing.isClosed %}
+            <article class="listing" onclick="handleListingClick({{listing.id}})">
+                <div class="image outer" style="background-image: url('/media/{{listing.imageURL}}')">
+                </div>
+                <div class="text">
+                    <h3 class="title">{{listing.title}}</h3>
+                    <p class="">by {{listing.username}}</p>
+                    <p class="bidValue">$ {{listing.currentHighestBid}}</p>
+                </div>
+            </article>
+            {%endif%}
+        {% endfor%}
     </div>
 </div>
 <script defer>
-    let data = '{{listings}}'
-    data = JSON.parse(data.replace(/&quot;/g,'"'));
+    let data = '{{payload}}'
+    data = data.replace(/&#x27;/g,'"')
+    data = data.replace(/&quot;/g,'"')
+    // data = JSON.parse(data)
+    // const handleFilter = () => {
+    //     const productGrid = document.querySelector('.productGrid.inner')
+    //     const newFilter = filter.value
+    //     let html = ''
+    //     console.log(data)
+    //     data.forEach(listing => {
+    //         if(newFilter==='all' && listing.fields.isClosed===false){
+    //             html += `
+    //             <article class="listing" onclick="handleListingClick(${listing.pk})">
+    //                 <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
+    //                 </div>
+    //                 <div class="text">
+    //                     <h3 class="title">${listing.fields.title}</h3>
+    //                     <p class="">by ${listing.fields.username}</p>
+    //                     <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
+    //                 </div>
+    //             </article>
+    //             `
+    //         }else if(newFilter!='all' && newFilter===listing.fields.category  && listing.fields.isClosed===false){
+    //             html+= `
+    //             <article class="listing" onclick="handleListingClick(${listing.pk})">
+    //                 <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
+    //                 </div>
+    //                 <div class="text">
+    //                     <h3 class="title">${listing.fields.title}</h3>
+    //                     <p class="">$by ${listing.fields.username}</p>
+    //                     <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
+    //                 </div>
+    //             </article>
+    //             `
+    //         }
+    //     });
+    //     productGrid.innerHTML = html
+    // }
     const handleFilter = () => {
-        const productGrid = document.querySelector('.productGrid.inner')
-        const newFilter = filter.value
-        let html = ''
-        console.log(data)
-        data.forEach(listing => {
-            if(newFilter==='all' && listing.fields.isClosed===false){
-                html += `
-                <article class="listing" onclick="handleListingClick(${listing.pk})">
-                    <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
-                    </div>
-                    <div class="text">
-                        <h3 class="title">${listing.fields.title}</h3>
-                        <p class="">by ${listing.fields.username}</p>
-                        <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
-                    </div>
-                </article>
-                `
-            }else if(newFilter!='all' && newFilter===listing.fields.category  && listing.fields.isClosed===false){
-                html+= `
-                <article class="listing" onclick="handleListingClick(${listing.pk})">
-                    <div class="image outer" style="background-image: url('/media/${listing.fields.image}')">
-                    </div>
-                    <div class="text">
-                        <h3 class="title">${listing.fields.title}</h3>
-                        <p class="">$by ${listing.fields.username}</p>
-                        <p class="bidValue">$ ${listing.fields.currentHighestBid}</p>
-                    </div>
-                </article>
-                `
-            }
-        });
-        productGrid.innerHTML = html
+        window.location.href = `/?filter=${filter.value}`
     }
-    handleFilter()
+    // Inserting the filter options
+    const currentFilter = new URLSearchParams(window.location.search).get('filter')
+    if(currentFilter==='misc'){
+        filter.innerHTML = '<option value="misc">Miscellaneous</option><option value="all">All</option><option value="clothing">Clothing</option>'
+    }
+    if(currentFilter==='clothing'){
+        filter.innerHTML = '<option value="clothing">Clothing</option><option value="all">All</option><option value="misc">Miscellaneous</option>'
+    }
+    if(!currentFilter || currentFilter==='all'){
+        filter.innerHTML = '<option value="all">All</option><option value="misc">Miscellaneous</option><option value="clothing">Clothing</option>' 
+    }
     const handleListingClick = (listingID) => {
         window.location.href = `/listing/${listingID}`
     }

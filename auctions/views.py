@@ -12,11 +12,32 @@ from django.core import serializers
 from .forms import *
 import json
 from django.db.models import Max
+from django.forms.models import model_to_dict
 
 def index(request):
-    listings = Listing.objects.all()
-    listings = serializers.serialize('json', listings)
-    return render(request, "auctions/index.html", {'listings':listings})
+    # Getting the filter params if it exists
+    filter = request.GET.get('filter','null')
+    if(filter=='null' or filter=='all'):
+        listings = Listing.objects.all()
+    else:
+        listings = Listing.objects.filter(category=filter)
+    payload = []
+    for count in range(listings.count()):
+        currentListingObject = listings[count]
+        currentHighestBid = Bid.objects.filter(listingID=currentListingObject.id).aggregate(Max('bidValue')).get('bidValue__max')
+        tempValue = {
+            'currentHighestBid': currentHighestBid,
+            #this function convert a SINGLE object to a dictionary. the default is there to conver the imagefield to string
+            # 'id' : json.dumps(model_to_dict(currentListingObject), default=str)
+            'id': currentListingObject.id,
+            'username': currentListingObject.username,
+            'imageURL': str(currentListingObject.image),
+            'isClosed': currentListingObject.isClosed,
+            'title': currentListingObject.title
+        }
+        payload.append(tempValue)
+    # No closed listings should be displayed
+    return render(request, "auctions/index.html", {'payload':payload, 'displayClosed': False})
 
 
 def login_view(request):
