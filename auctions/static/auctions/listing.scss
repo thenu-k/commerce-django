@@ -43,6 +43,10 @@ section.listing{
                                 text-decoration: underline;
                                 color: blue;
                             }
+                        &.closedStatus{
+                            margin-top: 10px;
+                            color: red;
+                        }
                         }
                         & form{
                             margin: 10px 0;
