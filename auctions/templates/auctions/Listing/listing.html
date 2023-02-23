@@ -15,18 +15,20 @@
                 </div>
                 <div class="subsection bidding">
                     <h3>Current Bid: $ {{currentHighestBid}}</h3>
-                    {% if user.is_authenticated and not userEqual and not currentUserIsHighest%}
+                    {% if user.is_authenticated and not userEqual and not currentUserIsHighest %}
                         <form class="biddingControls" onsubmit="placeBid(event)">
                             <input type="text" id="bidInput" placeholder="Place Bid">
                             <button type="submit">Submit</button>
                         </form>
                         <div id="bidMessage" class=""></div>
-                    {% elif user.is_authenticated and userEqual and not currentUserIsHighest%}
+                    {% elif user.is_authenticated and userEqual and not currentUserIsHighest %}
                         <p>You cannot bid on this listing.</p>
-                    {% elif user.is_authenticated and not userEqual and currentUserIsHighest%}
+                    {% elif user.is_authenticated and not userEqual and currentUserIsHighest %}
                         <p>You are the highest bidder.</p>
-                    {% else%}
+                    {% elif not user.is_authenticated %}
                         <p>Please <a href="/login">log in</a> to bid or to add this item to your watchlist.</p>
+                    {% else %}
+                        <p>Error</p>
                     {% endif %}
                 </div>
             </div>

@@ -160,6 +160,7 @@ def deleteAccount(request):
 def renderListingPage(request, listingID):
     listingObject = Listing.objects.filter(id=int(listingID)).values()
     # Checking whether this user is the user who created the listing
+    userEqual = False
     if(request.user.id==listingObject[0]['userID']):
         userEqual =True
     else: 
@@ -179,6 +180,7 @@ def renderListingPage(request, listingID):
         'userEqual' : userEqual,
         'currentUserIsHighest': currentUserIsHighest
     }
+    print(context)
     return render(request, 'auctions/Listing/listing.html', context)
 
 @csrf_exempt
