@@ -1,14 +1,47 @@
 {% extends "auctions/layout.html" %}
 {% load static %}
 {% block body %}
-<section class="listing">
+<section class="listing center">
     <div class="listing inner">
-        <h2></h2>
-        {{ listing.0.title }}
+        <h2>
+            {{ listing.0.title }}
+        </h2>
+        <div class="content">
+            <div class="image" style="background-image:url('/media/{{listing.0.image}}') ;"></div>
+            <div class="text">
+                <div class="subsection desc">
+                    <h3>Description</h3>
+                    <p>{{listing.0.description}}</p>
+                </div>
+                <div class="subsection bidding">
+                    <h3>Current Bid: $ {{listing.0.currentHighestBid}}</h3>
+                    {% if user.is_authenticated %}
+                        <form class="biddingControls" onsubmit="placeBid(event)">
+                            <input type="text" id="bidInput" placeholder="Place Bid">
+                            <button type="submit">Submit</button>
+                        </form>
+                        <div id="bidMessage" class=""></div>
+                    {% else %}
+                        <p>Please <a href="/login">log in</a> to bid or to add this item to your watchlist.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 <link rel="stylesheet" href="/static/auctions/listing.css">
-<script>
-    const listingData = JSON.parse('{{listing|safe}}')
+<script defer>
+    const currentHighestBid = parseFloat('{{listing.0.currentHighestBid|safe}}')
+    const placeBid = (e) => {
+        e.preventDefault()
+        bidMessage.classList.add('off')
+        const bid = parseFloat(bidInput.value)
+        if(bid<=currentHighestBid){
+            bidMessage.innerHTML = 'Bid Must Be Higher Than Current Value'
+            bidMessage.classList.remove('off')
+            return
+        }
+        
+    }
 </script>
 {% endblock %}
