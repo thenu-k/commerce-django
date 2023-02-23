@@ -174,11 +174,14 @@ def renderListingPage(request, listingID):
                 currentUserIsHighest = True
     else:
         currentHighestBid = Listing.objects.filter(id=listingID).values('baseBid')[0]['baseBid']
+    #Checking whether the user has watched this item
+    userHasWatched = False
     context = {
         'listing': listingObject,
         'currentHighestBid': currentHighestBid,
         'userEqual' : userEqual,
-        'currentUserIsHighest': currentUserIsHighest
+        'currentUserIsHighest': currentUserIsHighest,
+        'userHasWatched': userHasWatched
     }
     print(context)
     return render(request, 'auctions/Listing/listing.html', context)

@@ -31,6 +31,15 @@
                         <p>Error</p>
                     {% endif %}
                 </div>
+                {% if user.is_authenticated%}
+                    <div class="subsection watch">
+                        {% if not userHasWatched%}
+                        <button onclick="toggleWatch('on')" class="notWatched">Watch</button>
+                        {% else%}
+                        <button onclick="toggleWatch('off')" class="watched">Unwatch</button>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -70,6 +79,9 @@
             console.log(e)
             bidMessage.innerHTML = 'Bid Must Be Higher Than Current Value'
         })
+    }
+    const toggleWatch = (state) => {
+        null
     }
 </script>
 {% endblock %}

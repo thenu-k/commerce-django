@@ -33,6 +33,7 @@ section.listing{
                         margin-bottom: 10px;
                     }
                     &.bidding{
+                        margin-bottom: 30px;
                         h3{
                             font-size: 1em;
                         }
@@ -67,6 +68,25 @@ section.listing{
                             &.off{display: none;}
                             display: flex;
                             color: red;
+                        }
+                    }
+                    &.watch{
+                        & button{
+                            padding: 15px 20px;
+                            border-radius: 5px;
+                            font-weight: 600;
+                            cursor: pointer;
+                            &.notWatched{
+                                color: white;
+                                background-color: rgb(3, 66, 224);
+                                &:hover{background-color: rgb(3, 41, 211);}
+                            }
+                            &.watched{
+                                color: black;
+                                background-color: white;
+                                outline: 2px solid black;
+                                &:hover{background-color: rgb(207, 207, 207)}
+                            }
                         }
                     }
                 }
