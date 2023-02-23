@@ -162,3 +162,23 @@ def renderListingPage(request, listingID):
         'listing': listingObject
     }
     return render(request, 'auctions/Listing/listing.html', context)
+
+@csrf_exempt
+def newBid(request):
+    body_unicode = request.body.decode('utf-8')
+    body = json.loads(body_unicode)
+    newBidValue = body['newBidValue']
+    listingID = body['listingID']
+    listingObject = Listing.objects.get(id=listingID)
+    userObjet = User.objects.get(id=request.user.id)
+    allBidObjectsForListing = Bid.objects.filter(listingID=listingID)
+    if(newBidValue>listingObject.currentHighestBid):
+        listingObject.currentHighestBid= newBidValue
+        listingObject.save()
+        newBidObject = Bid(bidValue = newBidValue, listingID=listingObject.id, createdByUserID=request.user.id, createdByUserKey=userObjet, listingKey=listingObject)
+        newBidObject.save()
+        allBidObjectsForListing(isHighest=False)
+        payload = {'status': 'success'}
+        return JsonResponse(payload, status=200)
+    payload = {'status': 'failure'}
+    return JsonResponse(payload, status=401)

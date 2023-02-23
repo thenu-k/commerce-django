@@ -32,6 +32,7 @@
 <link rel="stylesheet" href="/static/auctions/listing.css">
 <script defer>
     const currentHighestBid = parseFloat('{{listing.0.currentHighestBid|safe}}')
+    const listingID = parseInt('{{listing.0.id}}')
     const placeBid = (e) => {
         e.preventDefault()
         bidMessage.classList.add('off')
@@ -41,7 +42,21 @@
             bidMessage.classList.remove('off')
             return
         }
-        
+        fetch('/newBid',{
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                newBidValue: bid,
+                listingID: listingID
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            console.log(data)
+        })
     }
 </script>
 {% endblock %}

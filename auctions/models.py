@@ -26,6 +26,7 @@ class Bid(models.Model):
     createdByUserID = models.IntegerField(blank=True, null=True)
     createdByUserKey = models.ForeignKey(User, on_delete=models.CASCADE)
     listingKey = models.ForeignKey(Listing, on_delete=models.CASCADE)
+    isHighest = models.BooleanField(auto_created=True, null=True, blank=True)
 
 
 # We need the models to auto cascade when one of them is updated
