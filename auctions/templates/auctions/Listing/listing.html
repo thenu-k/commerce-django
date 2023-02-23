@@ -14,7 +14,7 @@
                     <p>{{listing.0.description}}</p>
                 </div>
                 <div class="subsection bidding">
-                    <h3>Current Bid: $ {{listing.0.currentHighestBid}}</h3>
+                    <h3>Current Bid: $ {{currentHighestBid}}</h3>
                     {% if user.is_authenticated %}
                         <form class="biddingControls" onsubmit="placeBid(event)">
                             <input type="text" id="bidInput" placeholder="Place Bid">
@@ -31,7 +31,7 @@
 </section>
 <link rel="stylesheet" href="/static/auctions/listing.css">
 <script defer>
-    const currentHighestBid = parseFloat('{{listing.0.currentHighestBid|safe}}')
+    const currentHighestBid = parseFloat('{{currentHighestBid|safe}}')
     const listingID = parseInt('{{listing.0.id}}')
     const placeBid = (e) => {
         e.preventDefault()
@@ -55,7 +55,13 @@
         })
         .then(res => res.json())
         .then(data => {
-            console.log(data)
+            if(data.status==='success'){
+                window.location.reload()
+            }
+        })
+        .catch(e=>{
+            console.log(e)
+            bidMessage.innerHTML = 'Bid Must Be Higher Than Current Value'
         })
     }
 </script>

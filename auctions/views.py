@@ -11,6 +11,7 @@ import ast
 from django.core import serializers
 from .forms import *
 import json
+from django.db.models import Max
 
 def index(request):
     listings = Listing.objects.all()
@@ -157,9 +158,10 @@ def deleteAccount(request):
 
 def renderListingPage(request, listingID):
     listingObject = Listing.objects.filter(id=int(listingID)).values()
-    # listing_json =serializers.serialize('json', listingObject)
+    currentHighestBid = Bid.objects.filter(listingID=listingID).aggregate(Max('bidValue')).get('bidValue__max')
     context = {
-        'listing': listingObject
+        'listing': listingObject,
+        'currentHighestBid': currentHighestBid
     }
     return render(request, 'auctions/Listing/listing.html', context)
 
@@ -177,8 +179,8 @@ def newBid(request):
         listingObject.save()
         newBidObject = Bid(bidValue = newBidValue, listingID=listingObject.id, createdByUserID=request.user.id, createdByUserKey=userObjet, listingKey=listingObject)
         newBidObject.save()
-        allBidObjectsForListing(isHighest=False)
+        allBidObjectsForListing.update(isHighest=False)
         payload = {'status': 'success'}
-        return JsonResponse(payload, status=200)
+        return  JsonResponse(payload)
     payload = {'status': 'failure'}
     return JsonResponse(payload, status=401)
