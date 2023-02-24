@@ -1,21 +1,24 @@
 {% extends "auctions/layout.html" %}
 {% block body %}
 <!-- <form onsubmit="handleSubmit(event)"> -->
+<section class="new">       
 <form action="/createListing" method="post" enctype="multipart/form-data">
-    <label for="title">Title</label><br/>
+    <h1>Create New Listing</h1>
+    <!-- <label for="title">Title</label><br/> -->
     <input type="text" placeholder="Title" id="titleInput" name="title"><br/>
-    <label for="category">Category</label><br/>
+    <label for="category">Category: </label>
     <select name="category" id="categoryInput">
         <option value="misc" default>Miscellaneous</option>
         <option value="clothing">Clothing</option>
     </select><br/>
-    <label for="currentHighestBid">Base Bid</label><br/>
+    <!-- <label for="currentHighestBid">Base Bid</label><br/> -->
     <input type="text" placeholder="Base Bid" id="bidInput"name='currentHighestBid'><br/>
     <label for="image">Image Upload: </label>
-    <input type="file" name="image" id=""><br/>
+    <input type="file" name="image" id="" class="imageInput"><br/>
     <button type="submit">Submit</button>
 </form>
-</body>
+</section>
+<link rel="stylesheet" href="/static/auctions/general.css">
 <script defer>
 </script>
 {% endblock %}

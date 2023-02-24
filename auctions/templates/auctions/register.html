@@ -1,7 +1,7 @@
 {% extends "auctions/layout.html" %}
 
 {% block body %}
-
+<section class="register">
     <h2>Register</h2>
 
     {% if message %}
@@ -26,5 +26,6 @@
     </form>
 
     Already have an account? <a href="{% url 'login' %}">Log In here.</a>
-
+</section>
+<link rel="stylesheet" href="/static/auctions/general.css">
 {% endblock %}
