@@ -280,6 +280,7 @@ def setWatch(request, stateRequired, listingID):
 
 @csrf_exempt
 def renderWatchListPage(request):
+    filter = request.GET.get('filter','all')
     if request.user.is_authenticated:
         allUserWatches = Watch.objects.filter(createdByUserID = request.user.id)
         payload = []
@@ -290,16 +291,16 @@ def renderWatchListPage(request):
                 currentHighestBid = Bid.objects.filter(listingID=currentListing.id).aggregate(Max('bidValue')).get('bidValue__max')
             else:
                 currentHighestBid = Listing.objects.get(id=currentListing.id).baseBid
-            print(currentHighestBid)
-            tempValue = {
-                'currentHighestBid': currentHighestBid,
-                'id': currentListing.id,
-                'username': currentListing.username,
-                'imageURL': str(currentListing.image),
-                'isClosed': currentListing.isClosed,
-                'title': currentListing.title
-            }
-            payload.append(tempValue)
+            if filter=='all' or currentListing.category==filter:
+                tempValue = {
+                    'currentHighestBid': currentHighestBid,
+                    'id': currentListing.id,
+                    'username': currentListing.username,
+                    'imageURL': str(currentListing.image),
+                    'isClosed': currentListing.isClosed,
+                    'title': currentListing.title
+                }
+                payload.append(tempValue)
         return render(request, 'auctions/Watchlist/watchlist.html',{'payload': payload, 'displayClosed': True})
     else:
         return redirect('/404')
